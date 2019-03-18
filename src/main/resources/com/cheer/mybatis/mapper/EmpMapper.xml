@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cheer.mybatis.mapper.EmpMapper">
+    <resultMap id="resultMap" type="Emp">
+        <id property="empNo" column="empno"/>
+
+        <result property="eName" column="ename"/>
+        <result property="job" column="job"/>
+        <result property="mgr" column="mgr"/>
+        <result property="hireDate" column="hireDate"/>
+        <result property="sal" column="sal"/>
+        <result property="com" column="com"/>
+        <association property="dept" column="deptno">
+           <id property="deptNo" column="deptno"/>
+            <result property="dName" column="dname"/>
+            <result property="loc" column="loc"/>
+        </association>
+    </resultMap>
+    <select id="getList" resultMap="resultMap">
+        SELECT
+        e.*,
+        dname,
+        loc
+        from
+        emp e
+        left JOIN  dept d on e.deptno= d.deptno
+    </select>
+    <select id="getEmp" resultType="Emp">
+    select * from emp where empno = #{empNo}
+  </select>
+    <select id="getList" resultType="Emp">
+        select * from emp
+    </select>
+    <insert id="insert">
+        insert into emp values(#{empNo},#{eName},#{job},#{mgr},#{hireDate},#{sal},#{com},#{deptNo})
+    </insert>
+    <update id="update">
+        update emp
+         set ename=#{eName},job=#{job},mgr=#{mgr},hiredate=#{hireDate},sal=#{sal},com=#{com},deptno=#{deptNo}
+         where empno=#{empNo}
+    </update>
+    <delete id="delete">
+        delete from emp where empno =#{empNo}
+    </delete>
+    <select id="getCount" resultType="int">
+        select count(*) from emp
+    </select>
+</mapper>
+
